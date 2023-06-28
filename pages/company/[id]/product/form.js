@@ -3,7 +3,9 @@ import { Container } from "@chakra-ui/react";
 import FormProduct from "../../../../components/FormProducts";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
+import {
+	getSession
+} from "next-auth/react";
 const FormWithProduct = () => {
 	const router = useRouter();
 	const { type, id, productId } = router.query;
@@ -33,3 +35,18 @@ const FormWithProduct = () => {
 };
 
 export default FormWithProduct;
+
+export const getServerSideProps = async (context) => {
+	const session = await getSession(context);
+	if (!session) {
+		return {
+			redirect: {
+				destination: '/login',
+				permanent: false,
+			},
+		};
+	}
+	return {
+		props: { session },
+	};
+}

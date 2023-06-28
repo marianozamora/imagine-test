@@ -46,9 +46,6 @@ export const authOptions = {
 			session.id = token.id;
 			return session;
 		},
-		async signIn(token, account, profile) {
-			return true;
-		}
 	},
 	secret: process.env.NEXTAUTH_SECRET,
 	jwt: {

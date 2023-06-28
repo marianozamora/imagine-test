@@ -26,3 +26,19 @@ export default function MyApp({ Component, pageProps }) {
 		</SessionProvider>
 	);
 }
+
+export const getServerSideProps = async (context) => {
+	const session = await getSession(context);
+	console.log(session);
+	if (!session) {
+		return {
+			redirect: {
+				destination: "/login",
+				permanent: false,
+			},
+		};
+	}
+	return {
+		props: { session },
+	};
+};

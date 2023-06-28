@@ -5,6 +5,7 @@ import { Button, Input, Heading, SimpleGrid } from "@chakra-ui/react";
 import { FormField } from "../../../components/FormField";
 import { DownloadButton, PDFDownload } from "../../../utils/SendEmail";
 import { textToCapitalize } from "../../../utils/customFn";
+import { getSession } from "next-auth/react";
 
 const DetailCompany = () => {
 	const router = useRouter();
@@ -144,3 +145,18 @@ const DetailCompany = () => {
 };
 
 export default DetailCompany;
+
+export const getServerSideProps = async (context) => {
+	const session = await getSession(context);
+	if (!session) {
+		return {
+			redirect: {
+				destination: '/login',
+				permanent: false,
+			},
+		};
+	}
+	return {
+		props: { session },
+	};
+}

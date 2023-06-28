@@ -4,7 +4,7 @@ import withAuth from "next-auth/middleware"
 export default withAuth({
 //   jwt: { decode: authOptions.jwt },
 	callbacks: {
-		authorized: ({token}) => {
+		authorized: ({ token }) => {
 			return !!token
 		},
 	},
@@ -12,5 +12,5 @@ export default withAuth({
 
 })
 
-export const config = { matcher: ["/user/:path*"] }
+export const config = { matcher: ["/admin"] }
 // "/api/:function*"

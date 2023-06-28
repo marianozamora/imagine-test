@@ -3,6 +3,7 @@ import Table from '../components/Table'
 import { Container, Button, Heading } from '@chakra-ui/react'
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/react';
 
 const headerCompanies = [
 	'NIT', 'Name', 'Address', 'Phone', 'Actions'];
@@ -55,4 +56,19 @@ export default function Home() {
 				} headers={headerCompanies} list={companies} />
 			</Container>
 	)
+}
+
+export const getServerSideProps = async (context) => {
+	const session = await getSession(context);
+	if (!session) {
+		return {
+			redirect: {
+				destination: '/login',
+				permanent: false,
+			},
+		};
+	}
+	return {
+		props: { session },
+	};
 }

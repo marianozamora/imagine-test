@@ -3,6 +3,7 @@ import { Container } from "@chakra-ui/react";
 import FormCompany from "../../components/FormCompany";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
 
 const FormWithCompany = () => {
 	const router = useRouter();
@@ -30,3 +31,18 @@ const FormWithCompany = () => {
 };
 
 export default FormWithCompany;
+
+export const getServerSideProps = async (context) => {
+	const session = await getSession(context);
+	if (!session) {
+		return {
+			redirect: {
+				destination: '/login',
+				permanent: false,
+			},
+		};
+	}
+	return {
+		props: { session },
+	};
+}
