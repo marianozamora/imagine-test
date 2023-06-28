@@ -48,9 +48,6 @@ const securityHeaders = [
 ];
 
 module.exports = {
-	images: {
-		domains: ["res.cloudinary.com"],
-	},
 	async headers() {
 		return [
 			{
