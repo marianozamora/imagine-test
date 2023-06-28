@@ -11,7 +11,6 @@ export default function DashboardLayout({ children } : { children: React.ReactNo
             <main>
                 {children}
             </main>
-            {/* {pathname !=='/login' && pathname !=='/onboarding' ? <Footer /> : ''} */}
         </div>
     )
 }
