@@ -16,7 +16,7 @@ import {
 
 import { BiChat, BiLike, BiShare } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { dateFormat, textToCapitalize } from "../../utils/customFn";
+import { dateFormat, priceFormat, quantityFormat, textToCapitalize } from "../../utils/customFn";
 import { useSession } from "next-auth/react";
 
 const CardGeneral = ({ data, methods }) => {
@@ -39,7 +39,7 @@ const CardGeneral = ({ data, methods }) => {
 			</CardHeader>
 			<CardBody p={4}>
 				<Stack spacing={3}>
-					<Text fontSize="xs">{data.description}</Text>
+					<Text fontSize="xs">{data.description} - {priceFormat(data.price)} - {data.quantity} Und</Text>
 				</Stack>
 			</CardBody>
 			<Image

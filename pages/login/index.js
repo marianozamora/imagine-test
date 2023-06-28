@@ -1,15 +1,9 @@
 import {
 	Box,
 	Button,
-	FormControl,
-	FormLabel,
 	Heading,
 	Input,
 	Stack,
-	Text,
-	HStack,
-	Checkbox,
-	Divider,
 	Container,
 } from "@chakra-ui/react";
 
@@ -19,12 +13,15 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function LoginPage() {
 	const schema = yup.object().shape({
 		username: yup.string().required(),
 		password: yup.string().required(),
 	});
+
+	const [errorsLogin, setErrors] = useState('');
 
 	const {
 		getValues,
@@ -38,12 +35,25 @@ export default function LoginPage() {
 	const router = useRouter();
 
 	const sendLogin = async () => {
-		const dataToSend = getValues();
-		const data = await signIn("credentials", {
-			redirect: false,
-			username: dataToSend.username,
-			password: dataToSend.password,
-		});
+		try {
+			const dataToSend = getValues();
+			const data = await signIn("credentials", {
+				redirect: false,
+				username: dataToSend.username.trim(),
+				password: dataToSend.password.trim(),
+			});
+
+			if (data.error) {
+				setErrors(data.error);
+				return;
+			}
+
+		} catch (error) {
+			console.log(error);
+			setErrors(error);
+		}
+
+
 
 		router.push("/");
 	};
@@ -91,6 +101,11 @@ export default function LoginPage() {
 										/>
 									</FormField>
 								</div>
+
+								{errorsLogin && (
+									<div>Something was wrong</div>
+								)
+											}
 
 								<Button
 									className="bg-blue-500 center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

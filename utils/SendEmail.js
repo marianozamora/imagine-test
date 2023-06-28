@@ -106,7 +106,7 @@ export const PDFDownload = ({ data, name }) => {
 					style={{ backgroundColor: '#ec4848', padding: 10, color: 'white', borderRadius: 5 }}
 
 					document={<InventoryPDF inventoryData={data} name={name} />}
-					fileName="example.pdf"
+					fileName={`Inventory-${name}.pdf`}
 				>
 					{({ blob, url, loading, error }) =>
 						loading ? "Loading document..." : "Download PDF"
