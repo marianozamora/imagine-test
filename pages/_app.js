@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useRouter } from "next/router";
+import { getSession, useSession } from "next-auth/react";
 
 const theme = extendTheme({
 	components: {
@@ -13,8 +14,12 @@ const theme = extendTheme({
 export default function MyApp({ Component, pageProps }) {
 	const router = useRouter();
 
-	if ([`/register`, "/login"].includes(router.pathname)) {
-		return <Component {...pageProps} />;
+	if (["/login"].includes(router.pathname)) {
+		return (
+			<ChakraProvider theme={theme}>
+					<Component {...pageProps} />
+			</ChakraProvider>
+		);
 	}
 	return (
 		<SessionProvider session={pageProps.session}>
@@ -29,7 +34,6 @@ export default function MyApp({ Component, pageProps }) {
 
 export const getServerSideProps = async (context) => {
 	const session = await getSession(context);
-	console.log(session);
 	if (!session) {
 		return {
 			redirect: {

@@ -5,7 +5,7 @@ import { Button, Input, Heading, SimpleGrid } from "@chakra-ui/react";
 import { FormField } from "../../../components/FormField";
 import { DownloadButton, PDFDownload } from "../../../utils/SendEmail";
 import { textToCapitalize } from "../../../utils/customFn";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
 const DetailCompany = () => {
 	const router = useRouter();
@@ -14,6 +14,8 @@ const DetailCompany = () => {
 	const [values, setValues] = useState({
 		email: "",
 	});
+
+	const { data: session } = useSession();
 
 	const { id } = router.query;
 	useEffect(() => {
@@ -37,31 +39,29 @@ const DetailCompany = () => {
 	return (
 		<div>
 			<h1 className="mt-10">Detail Company</h1>
-			{
-				company && (
-					<Heading className="mb-4">
-				{textToCapitalize(company.name || "")}
-			</Heading>
+			{company && (
+				<Heading className="mb-4">
+					{textToCapitalize(company.name || "")}
+				</Heading>
+			)}
 
-				)
-			}
+			{session?.role === "ADMIN" ? (
+				<Button
+					className="mr-4"
+					onClick={() => {
+						router.push(
+							`/company/${id}/product/form?type=create&&inventoryId=${company.inventory.id}`
+						);
+					}}
+				>
+					Agregar Producto
+				</Button>
+			) : null}
 
-
-			<Button
-				className="mr-4"
-				onClick={() => {
-					router.push(
-						`/company/${id}/product/form?type=create&&inventoryId=${company.inventory.id}`
-					);
-				}}
-			>
-				Agregar Producto
-			</Button>
-			{	company.inventory &&
+			{company.inventory &&
 				company.inventory.product &&
 				company.inventory.product.length > 0 && (
-				<PDFDownload
-
+					<PDFDownload
 						name={company.name || ""}
 						data={company.inventory.product || []}
 					></PDFDownload>
@@ -71,44 +71,44 @@ const DetailCompany = () => {
 				company.inventory.product &&
 				company.inventory.product.length > 0 && (
 					<form
-					onSubmit={async (event) => {
-						event.preventDefault();
-						const mixData = Object.assign(
-							{},
-							{
-								data: company.inventory.product,
-								name: company.name,
-							},
-							values
-						);
-						const data = await fetch("/api/mail", {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify(mixData),
-						});
+						onSubmit={async (event) => {
+							event.preventDefault();
+							const mixData = Object.assign(
+								{},
+								{
+									data: company.inventory.product,
+									name: company.name,
+								},
+								values
+							);
+							const data = await fetch("/api/mail", {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+								},
+								body: JSON.stringify(mixData),
+							});
 
-						const response = await data.json();
-					}}
-				>
-					<FormField>
-						<label htmlFor="name">Send Inventory via Email</label>
-						<Input
-							type="text"
-							id="email"
-							name="email"
-							className="mt-3 mb-3 block w-full"
-							placeholder="Email"
-							onChange={handleChange}
-							value={values.email}
-						/>
-					</FormField>
-					<Button type="submit">Send Inventory</Button>
-				</form>
-
+							const response = await data.json();
+						}}
+					>
+						<FormField>
+							<label htmlFor="name">
+								Send Inventory via Email
+							</label>
+							<Input
+								type="text"
+								id="email"
+								name="email"
+								className="mt-3 mb-3 block w-full"
+								placeholder="Email"
+								onChange={handleChange}
+								value={values.email}
+							/>
+						</FormField>
+						<Button type="submit">Send Inventory</Button>
+					</form>
 				)}
-
 
 			<SimpleGrid
 				spacing={4}
@@ -151,7 +151,7 @@ export const getServerSideProps = async (context) => {
 	if (!session) {
 		return {
 			redirect: {
-				destination: '/login',
+				destination: "/login",
 				permanent: false,
 			},
 		};
@@ -159,4 +159,4 @@ export const getServerSideProps = async (context) => {
 	return {
 		props: { session },
 	};
-}
+};

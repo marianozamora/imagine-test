@@ -61,11 +61,6 @@ export default function Header() {
 						<PopoverBody>
 							<ul>
 								<li>
-									<Link legacyBehavior href="/dashboard">
-										Dashboard
-									</Link>
-								</li>
-								<li>
 									<button onClick={()=>signOut()}>
 										Sign Out
 									</button>

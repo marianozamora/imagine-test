@@ -3,7 +3,7 @@ import Table from '../components/Table'
 import { Container, Button, Heading } from '@chakra-ui/react'
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 
 const headerCompanies = [
 	'NIT', 'Name', 'Address', 'Phone', 'Actions'];
@@ -11,6 +11,8 @@ const headerCompanies = [
 export default function Home() {
 	const [companies, setCompanies] = useState([]);
 	const router = useRouter();
+
+	const { data: session } = useSession();
 
 	useEffect(() => {
 		const getCompanies = async () => {
@@ -25,13 +27,19 @@ export default function Home() {
 			<Heading className='mb-4'>
 				Companies
 			</Heading>
-			<Button className='mb-4'
-				onClick={() => {
-					router.push('/company/form?type=create');
-				}}
-			>
-				Create Company
-			</Button>
+			{
+				session?.role === 'ADMIN' ? (
+					<Button className='mb-4'
+					onClick={() => {
+						router.push('/company/form?type=create');
+					}}
+				>
+					Create Company
+				</Button>
+
+				) : null
+			}
+
 			<Table methods={
 				{
 					delete: async (id) => {

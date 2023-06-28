@@ -21,13 +21,13 @@ const handler = async (req, res) => {
 			const msg = {
 				to: email,
 				from: "mariano@maaar.io",
-				subject: "Sending with Twilio SendGrid is Fun",
-				text: "and easy to do anywhere, even with Node.js",
-				html: "<strong>and easy to do anywhere, even with Node.js</strong></br>",
+				subject: `Sending Inventory PDF | Company: ${name}`,
+				text: "Best Inventory PDF in town! You can find any product here!",
+				html: "Good Opportunity to buy something</strong></br>",
 				attachments: [
 					{
 						content: base64PDF,
-						filename: "inventory.pdf",
+						filename: `inventory-${name}.pdf`,
 						type: "application/pdf",
 						disposition: "attachment",
 					},
@@ -39,7 +39,6 @@ const handler = async (req, res) => {
 			res.status(200).json({ status: "Ok" });
 		});
 	} catch (error) {
-		console.error(error);
 		res.status(500).json({
 			error: "An error occurred while sending the email",
 		});

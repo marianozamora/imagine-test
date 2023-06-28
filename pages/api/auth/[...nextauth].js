@@ -18,7 +18,6 @@ export const authOptions = {
 			},
 			async authorize(credentials, req) {
 				const user = await validateUser(credentials.username, credentials.password);
-
 				if (user) {
 					return user;
 				} else {
@@ -27,6 +26,7 @@ export const authOptions = {
 
 
 			},
+
 		}),
 	],
 	theme: {
@@ -35,17 +35,22 @@ export const authOptions = {
 	session: {
 		strategy: "jwt",
 	},
-	callback: {
-		async jwt(token, user, account, profile, isNewUser) {
+	callbacks: {
+		async jwt({ token, user }) {
 			if (user) {
 				token.id = user.id;
+				token.role = user.role;
+				token.username = user.username;
 			}
 			return token;
 		},
-		async session(session, token) {
+		async session({ session, token }) {
 			session.id = token.id;
+			session.role = token.role;
+			session.username = token.username;
 			return session;
 		},
+
 	},
 	secret: process.env.NEXTAUTH_SECRET,
 	jwt: {

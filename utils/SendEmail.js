@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 
-import { Page, Document, Text, View, StyleSheet } from "@react-pdf/renderer"; //import { send } from "@sendgrid/mail";
+import { Page, Document, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 import { textToCapitalize } from "./customFn";
 const styles = StyleSheet.create({
