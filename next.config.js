@@ -4,14 +4,12 @@
 // after learning more below.
 
 const ContentSecurityPolicy = `
-  default-src 'self'  localhost:* *.vercel.app *.vercel.com *.google.com *.googleapis.com authjs.dev *.mapbox.com data: blob: ws: wss: ;
-  script-src 'self'  blob: 'unsafe-inline' 'unsafe-eval' *.google.com *.googleapis.com *.gstatic.com *.vercel.app *.vercel.com;
-  child-src 'self' blob:;
-  img-src 'self' data: blob: *.cloudinary.com;
-  worker-src 'self' blob: *.googleapis.com *.gstatic.com *.vercel.app *.vercel.com *.mapbox.com;
-  style-src 'self' 'unsafe-inline' *.googleapis.com *.gstatic.com *.vercel.app *.vercel.com *.mapbox.com;
-  font-src 'self' data:  *.googleapis.com *.gstatic.com *.vercel.app *.vercel.com *.mapbox.com;
-  connect-src 'self' *.vercel.app *.vercel.com *.googleapis.com *.gstatic.com *.google.com ;
+  default-src 'self'  localhost:* *.vercel.app *.vercel.com  ;
+  img-src 'self' data: *;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.vercel.app *.vercel.com  ;
+  style-src 'self' 'unsafe-inline' *.vercel.app *.vercel.com  ;
+  font-src 'self' data: *.vercel.app *.vercel.com  ;
+
 
 `;
 const securityHeaders = [
@@ -43,10 +41,10 @@ const securityHeaders = [
 		key: "Referrer-Policy",
 		value: "origin-when-cross-origin",
 	},
-	{
-	    key: 'Content-Security-Policy',
-	    value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
-	}
+	// {
+	//     key: 'Content-Security-Policy',
+	//     value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
+	// }
 ];
 
 module.exports = {

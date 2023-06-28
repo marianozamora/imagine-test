@@ -1,6 +1,5 @@
 import prisma from "../lib/prisma";
 import bcrypt from "bcrypt";
-import { PrismaClient } from "@prisma/client";
 
 interface User {
 	username: string;

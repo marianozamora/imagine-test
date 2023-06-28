@@ -11,11 +11,12 @@ export const authOptions = {
 	providers: [
 		CredentialsProvider({
 			name: "Credentials",
+			id: "credentials",
 			credentials: {
-				username: { label: "Username", type: "text", placeholder: "jsmith" },
+				username: { label: "Username", type: "text", placeholder: "admin" },
 				password: { label: "Password", type: "password" },
 			},
-			async authorize(credentials) {
+			async authorize(credentials, req) {
 				const user = await validateUser(credentials.username, credentials.password);
 
 				if (user) {
@@ -23,6 +24,8 @@ export const authOptions = {
 				} else {
 					return null;
 				}
+
+
 			},
 		}),
 	],
@@ -42,6 +45,9 @@ export const authOptions = {
 		async session(session, token) {
 			session.id = token.id;
 			return session;
+		},
+		async signIn(token, account, profile) {
+			return true;
 		}
 	},
 	secret: process.env.NEXTAUTH_SECRET,
@@ -50,9 +56,8 @@ export const authOptions = {
 		secret: "test"
 	},
 	pages: {
-		signIn: "/auth/signin",
-		error: "/auth/error",
-	},
+		signIn: "/login",
+	}
 };
 
 export default NextAuth(authOptions);
